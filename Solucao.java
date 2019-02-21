@@ -4,7 +4,7 @@ public class Solucao{//inicio classe Solucao
 
 	public static void main(String[]args){//inicio main()
 
-		String str = MyIO.readLine();
+		String str = read();
 		int n = str.length();
 		char[][] c;
 
@@ -97,6 +97,16 @@ public class Solucao{//inicio classe Solucao
 		
 
 	}//fim ordena()
+
+	public static String readEncoding() throws Exception{//inicio readEncoding()
+		BufferedReader br = new BufferedReader(new FileReader());
+		String str = br.readLine();
+
+		br.close;
+
+		return str;
+
+	}//fim readEncoding()
 
 	public static void mostrar(char[][] c, int tam){//inicio mostrar()
 
