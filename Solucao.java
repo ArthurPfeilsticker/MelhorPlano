@@ -1,15 +1,38 @@
 //Solucao para o problema proposto no teste tecnico (Melhor Plano)
 
+import java.io.*;
+import java.util.*;
+
 public class Solucao{//inicio classe Solucao
 
-	public static void main(String[]args){//inicio main()
+	public static void main(String[]args) throws Exception{//inicio main()
 
-		String str = read();
-		int n = str.length();
-		char[][] c;
+		String str;
+		char[][]c;
+		int n;
 
-		c = setaMatriz(str);
-		mostrar(c, n);
+		try{//inicio try
+
+			str = readEncoding("encode-2.in");
+			n = str.length();
+			c = setaMatriz(str);
+			writeEncoding(c, n, str, "encode-2.out");
+
+			str = readEncoding("encode-3.in");
+			n = str.length();
+			c = setaMatriz(str);
+			writeEncoding(c, n, str, "encode-3.out");
+
+			str = readEncoding("encode-4.in");
+			n = str.length();
+			c = setaMatriz(str);
+			writeEncoding(c, n, str, "encode-4.out");
+		
+		}catch(Exception exception){//inicio tratamento dce esceptions
+
+			System.out.println(exception);
+
+		}//fim catch
 
 	}//fim main()
 	
@@ -17,6 +40,7 @@ public class Solucao{//inicio classe Solucao
 
 		char[][] c = new char[str.length()][str.length()];
 		char[] tmp = new char[str.length()];
+
 		String temp = str;
 
 		for(int i = 0; i < str.length(); i++){//inicio for
@@ -29,7 +53,13 @@ public class Solucao{//inicio classe Solucao
 				c[i][n] = tmp[n];
 
 			}//fim for
+
 		}//fim for
+
+				String teste = "";
+
+
+		c = ordena(c, str);
 
 		return c;
 
@@ -92,34 +122,103 @@ public class Solucao{//inicio classe Solucao
 
 	}//fim setaVetor()
 
-	public static char[][] ordena(char c[][]){//inicio ordena()
+	public static char[][] ordena(char c[][], String palavra){//inicio ordena()
 
-		
+		char[][] matriz = new char[palavra.length()][palavra.length()];
+		String[] str = new String[palavra.length()];
+		int posicao;
+
+
+		for(int i = 0; i < palavra.length(); i++){//inicio for
+
+			str[i] = "";
+
+		}//fim for
+
+		for(int i = 0; i < palavra.length(); i++){//inicio for
+			for(int j = 0; j < palavra.length(); j++){//inicio for
+				
+				str[i] += c[i][j];
+
+			}//fim for
+		}//fim for
+
+		for (int i = 1; i < str.length; i++) {
+			String s = str[i];
+			for (int j = i - 1; j >= 0 && str[j].compareToIgnoreCase(s) > 0; j--){
+				str[j + 1] = str[j];
+				str[j] = s;
+			}//fim for
+		}//fim for
+
+		for(int i = 0; i < palavra.length(); i++){//inicio for
+			for(int j = 0; j < palavra.length(); j++){//inicio for
+
+				matriz[i][j] = str[i].charAt(j);  
+
+              		}//fim for
+		}//fim for
+
+		return matriz;
 
 	}//fim ordena()
 
-	public static String readEncoding() throws Exception{//inicio readEncoding()
-		BufferedReader br = new BufferedReader(new FileReader());
+	public static String readEncoding(String arq) throws Exception{//inicio readEncoding()
+		BufferedReader br = new BufferedReader(new FileReader(arq));
 		String str = br.readLine();
 
-		br.close;
+		br.close();
 
 		return str;
 
 	}//fim readEncoding()
 
-	public static void mostrar(char[][] c, int tam){//inicio mostrar()
+	public static int achaCerta(char[][] c, int tam, String str){//inicio achaCerta()
 
-		String ultimas = "";
-		
+		int posCerta = 0;
+		String[] array = new String[tam];
+
+		for(int i = 0; i < str.length(); i++){//inicio for
+
+                        array[i] = "";
+
+                }//fim for
+
 		for(int i = 0;i < tam; i++){//inicio for
+			for(int j = 0; j < tam; j++){//inicio for
+
+				array[i] += c[i][j];
+
+			}//fim for
+		}//fim for
+
+		for(int i = 0; i < tam; i++){//inicio for
+
+			if(str.equals(array[i]))
+				posCerta = i;
+
+		}//fim for
+
+		return posCerta;
+
+	}//fim achaCerta()
+
+	public static void writeEncoding(char[][] c, int tam, String str, String arquivo)throws Exception{//inicio writeEncoding()
+
+		int posCerta = achaCerta(c, tam, str);
+		String ultimas = "";
+
+		for(int i = 0; i < tam; i++){//inicio for
 
 			ultimas += c[i][tam-1];
 
 		}//fim for
 
-		MyIO.println(ultimas);
+		BufferedWriter bw = new BufferedWriter(new FileWriter(arquivo));
+		bw.write("['"+ultimas+"',"+posCerta+"]\n");
 
-	}//fim mostrar()
+		bw.close();
+
+	}//fim writeEncoding()
 
 }//fim classe Solucao
